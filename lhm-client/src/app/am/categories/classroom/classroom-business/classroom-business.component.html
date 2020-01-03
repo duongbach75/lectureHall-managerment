@@ -1,0 +1,336 @@
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <!-- (ngSubmit)="submit(AmphitheaterForm.value)" -->
+        <div class="portlet box grey-cascade">
+            <div class="portlet-title">
+                <div class="caption" *ngIf="isUpdate===true">
+                    <i class="fa fa-globe"></i>{{ 'SIDEBAR.Directory' | translate }} >
+                    {{ 'SIDEBAR.Classroom' | translate }} > {{ 'Common.Update'
+                    | translate }}
+                </div>
+                <div class="caption" *ngIf="isUpdate===false">
+                    <i class="fa fa-globe"></i>{{ 'SIDEBAR.Directory' | translate }} >
+                    {{ 'SIDEBAR.Classroom' | translate }} > {{ 'Common.Create'
+                    | translate }}
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-horizontal align-middle" [formGroup]="classroomForm"
+                            (ngSubmit)="submit(classroomForm.value)">
+                            <div class="row">
+                                <!-- input  classroom -->
+                                <div class="col-md-6">
+                                    <input id="id" type="hidden" class="form-control" formControlName="idClassroom" />
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"
+                                            for="nameClassroom">{{ 'Classroom.Name' | translate }}
+                                            <span style="color:red;"> *</span>
+                                        </label>
+                                        <div class="col-md-8">
+                                            <input id="nameClassroom" autocomplete="off" type="text"
+                                                class="form-control" formControlName="nameClassroom"
+                                                placeholder="{{ 'Classroom.Name' | translate }}" />
+                                            <!-- <div class="col-md-8">{{amphitheater?.nameClassroom}}</div> -->
+                                            <small class="error"
+                                                *ngIf="classroomForm.get('nameClassroom').invalid && (classroomForm.get('nameClassroom').touched)">
+                                                <span *ngIf="classroomForm.get('nameClassroom').errors.required">
+                                                    {{ 'Message.Required' | translate }}
+                                                </span>
+                                                <span
+                                                    *ngIf="isUpdate===false && !classroomForm.get('nameClassroom').errors.required&&classroomForm.get('nameClassroom').errors.pattern!=null">
+                                                    {{ 'Message.CodeInvalid' | translate }}
+                                                </span>
+                                                <span
+                                                    *ngIf="!classroomForm.get('nameClassroom').errors.required&&classroomForm.get('nameClassroom').errors.maxlength!=null">
+                                                    {{ 'Message.MaxLength' | translate }} 20
+                                                </span>
+                                            </small>
+                                            <small class="error"
+                                                *ngIf="!classroomForm.get('nameClassroom').invalid && (classroomForm.get('nameClassroom').touched)">
+                                                <span *ngIf="classroomForm.get('nameClassroom').value.trim() == ''">
+                                                    {{ 'Message.CodeInvalid' | translate }}
+                                                </span>
+                                                <span
+                                                    *ngIf="isUpdate===true && !isEqualOld(classroomForm.get('nameClassroom').value, 'code')">
+                                                    {{ 'Message.Same' | translate }}
+                                                </span>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <small class="error"
+                                    *ngIf="classroomForm.get('nameClassroom').invalid && (classroomForm.get('nameClassroom').touched)">
+                                    <span
+                                        *ngIf="classroomForm.get('nameClassroom').errors.required||classroomForm.get('nameClassroom').errors.pattern!=null">
+                                        {{ 'Message.Required' | translate }}
+                                    </span>
+                                    <span
+                                        *ngIf="!classroomForm.get('nameClassroom').errors.required&&classroomForm.get('nameClassroom').errors.maxlength!=null">
+                                        {{ 'Message.MaxLength' | translate }} 50
+                                    </span>
+                                </small>
+                                <small class="error"
+                                    *ngIf="!classroomForm.get('nameClassroom').invalid && (classroomForm.get('nameClassroom').touched)">
+                                    <span
+                                        *ngIf="isUpdate===true && !isEqualOld(classroomForm.get('nameClassroom').value, 'name')">
+                                        {{ 'Message.Same' | translate }}
+                                    </span>
+                                </small>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6" *ngIf="!isUpdate===true">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"
+                                            for="statuss">{{'Classroom.Status'|translate}}
+                                            <span style="color:red;"> *</span>
+                                        </label>
+                                        <div class="col-md-8">
+                                            <input type="hidden" required>
+                                            <select class="form-control" formControlName="statuss" autofocus>
+                                                <option *ngFor="let status of listStatus" [value]="status.id">
+                                                    {{status.name}}</option>
+                                            </select>
+                                            <small class="error" *ngIf="classroomForm.get('statuss').invalid 
+                                          && (classroomForm.get('statuss').touched)">
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+                                <!-- input update tên giảng đường -->
+                                <div class="col-md-6">
+                                    <input id="id" type="hidden" class="form-control" formControlName="idClassroom" />
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"
+                                            for="amphitheater">{{ 'Classroom.Amphitheater' | translate }}
+                                            <span style="color:red;"> *</span>
+                                        </label>
+                                        <div class="col-md-8">
+                                            <ng-select [disabled]="false"
+                                                [active]="indexAmphitheaterSelection!=null?[amphitheaterSelections[indexAmphitheaterSelection]]:''"
+                                                [disabled]="disabled" [items]="amphitheaterSelections"
+                                                (selected)="amphitheaterChanged($event?.id)"
+                                                (removed)="refreshAmphitheaterValue($event)"
+                                                placeholder="{{ 'Classroom.Amphitheater' | translate }}  "
+                                                ngDefaultControl>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- kí hiệu -->
+                                <div class="col-md-6">
+                                    <input id="id" type="hidden" class="form-control" formControlName="idClassroom" />
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"
+                                            for="symbol">{{ 'Classroom.Symbol' | translate }}
+                                            <span style="color:red;"> *</span>
+                                        </label>
+                                        <div class="col-md-8">
+                                            <input id="symbol" autocomplete="off" type="text" class="form-control"
+                                                formControlName="symbol"
+                                                placeholder="{{ 'Classroom.Symbol' | translate }}" />
+                                            <!-- <div class="col-md-8">{{amphitheater?.nameClassroom}}</div> -->
+                                            <small class="error"
+                                                *ngIf="classroomForm.get('symbol').invalid && (classroomForm.get('symbol').touched)">
+                                                <span *ngIf="classroomForm.get('symbol').errors.required">
+                                                    {{ 'Message.Required' | translate }}
+                                                </span>
+                                                <span
+                                                    *ngIf="isUpdate===false && !classroomForm.get('symbol').errors.required&&classroomForm.get('symbol').errors.pattern!=null">
+                                                    {{ 'Message.CodeInvalid' | translate }}
+                                                </span>
+                                                <span
+                                                    *ngIf="!classroomForm.get('symbol').errors.required&&classroomForm.get('symbol').errors.maxlength!=null">
+                                                    {{ 'Message.MaxLength' | translate }} 20
+                                                </span>
+                                            </small>
+                                            <small class="error"
+                                                *ngIf="!classroomForm.get('symbol').invalid && (classroomForm.get('symbol').touched)">
+                                                <span *ngIf="classroomForm.get('symbol').value.trim() == ''">
+                                                    {{ 'Message.CodeInvalid' | translate }}
+                                                </span>
+                                                <span
+                                                    *ngIf="isUpdate===true && !isEqualOld(classroomForm.get('symbol').value, 'code')">
+                                                    {{ 'Message.Same' | translate }}
+                                                </span>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+                                <!-- số lượng -->
+                                <div class="col-md-6">
+                                    <input id="id" type="hidden" class="form-control" formControlName="idClassroom" />
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"
+                                            for="amount">{{ 'Classroom.Amount' | translate }}
+                                            <span style="color:red;"> *</span>
+                                        </label>
+                                        <div class="col-md-8">
+                                            <input id="amount" autocomplete="off" type="text" class="form-control"
+                                                formControlName="amount"
+                                                placeholder="{{ 'Classroom.Amount' | translate }}" />
+                                            <!-- <div class="col-md-8">{{amphitheater?.nameClassroom}}</div> -->
+                                            <small class="error"
+                                                *ngIf="classroomForm.get('amount').invalid && (classroomForm.get('amount').touched)">
+                                                <span *ngIf="classroomForm.get('amount').errors.required">
+                                                    {{ 'Message.Required' | translate }}
+                                                </span>
+                                                <span
+                                                    *ngIf="isUpdate===false && !classroomForm.get('amount').errors.required&&classroomForm.get('amount').errors.pattern!=null">
+                                                    {{ 'Message.CodeInvalid' | translate }}
+                                                </span>
+                                                <span
+                                                    *ngIf="!classroomForm.get('amount').errors.required&&classroomForm.get('amount').errors.maxlength!=null">
+                                                    {{ 'Message.MaxLength' | translate }} 20
+                                                </span>
+                                            </small>
+                                            <small class="error"
+                                                *ngIf="!classroomForm.get('amount').invalid && (classroomForm.get('amount').touched)">
+                                                <span *ngIf="classroomForm.get('amount').value.trim() == ''">
+                                                    {{ 'Message.CodeInvalid' | translate }}
+                                                </span>
+                                                <span
+                                                    *ngIf="isUpdate===true && !isEqualOld(classroomForm.get('amount').value, 'code')">
+                                                    {{ 'Message.Same' | translate }}
+                                                </span>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+                                <!-- kích cỡ -->
+                                <div class="col-md-6">
+                                    <input id="id" type="hidden" class="form-control" formControlName="size" />
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"
+                                            for="size">{{ 'Classroom.Size' | translate }}
+                                            <span style="color:red;"> *</span>
+                                        </label>
+                                        <div class="col-md-8">
+                                            <input id="size" autocomplete="off" type="text" class="form-control"
+                                                formControlName="size"
+                                                placeholder="{{ 'Classroom.Size' | translate }}" />
+                                            <!-- <div class="col-md-8">{{amphitheater?.nameClassroom}}</div> -->
+                                            <small class="error"
+                                                *ngIf="classroomForm.get('size').invalid && (classroomForm.get('size').touched)">
+                                                <span *ngIf="classroomForm.get('size').errors.required">
+                                                    {{ 'Message.Required' | translate }}
+                                                </span>
+                                                <span
+                                                    *ngIf="isUpdate===false && !classroomForm.get('size').errors.required&&classroomForm.get('size').errors.pattern!=null">
+                                                    {{ 'Message.CodeInvalid' | translate }}
+                                                </span>
+                                                <span
+                                                    *ngIf="!classroomForm.get('size').errors.required&&classroomForm.get('size').errors.maxlength!=null">
+                                                    {{ 'Message.MaxLength' | translate }} 20
+                                                </span>
+                                            </small>
+                                            <small class="error"
+                                                *ngIf="!classroomForm.get('size').invalid && (classroomForm.get('size').touched)">
+                                                <span *ngIf="classroomForm.get('size').value.trim() == ''">
+                                                    {{ 'Message.CodeInvalid' | translate }}
+                                                </span>
+                                                <span
+                                                    *ngIf="isUpdate===true && !isEqualOld(classroomForm.get('size').value, 'code')">
+                                                    {{ 'Message.Same' | translate }}
+                                                </span>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+                                <!-- chức năng -->
+                                <div class="col-md-6">
+                                    <input id="id" type="hidden" class="form-control" formControlName="idClassroom" />
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"
+                                            for="chucNang">{{ 'Classroom.Functions' | translate }}
+                                            <span style="color:red;"> *</span>
+                                        </label>
+                                        <div class="col-md-8">
+                                            <input id="chucNang" autocomplete="off" type="text" class="form-control"
+                                                formControlName="chucNang"
+                                                placeholder="{{ 'Classroom.Functions' | translate }}" />
+                                            <!-- <div class="col-md-8">{{amphitheater?.nameClassroom}}</div> -->
+                                            <small class="error"
+                                                *ngIf="classroomForm.get('chucNang').invalid && (classroomForm.get('chucNang').touched)">
+                                                <span *ngIf="classroomForm.get('chucNang').errors.required">
+                                                    {{ 'Message.Required' | translate }}
+                                                </span>
+                                                <span
+                                                    *ngIf="isUpdate===false && !classroomForm.get('chucNang').errors.required&&classroomForm.get('chucNang').errors.pattern!=null">
+                                                    {{ 'Message.CodeInvalid' | translate }}
+                                                </span>
+                                                <span
+                                                    *ngIf="!classroomForm.get('chucNang').errors.required&&classroomForm.get('chucNang').errors.maxlength!=null">
+                                                    {{ 'Message.MaxLength' | translate }} 20
+                                                </span>
+                                            </small>
+                                            <small class="error"
+                                                *ngIf="!classroomForm.get('chucNang').invalid && (classroomForm.get('chucNang').touched)">
+                                                <span *ngIf="classroomForm.get('chucNang').value.trim() == ''">
+                                                    {{ 'Message.CodeInvalid' | translate }}
+                                                </span>
+                                                <span
+                                                    *ngIf="isUpdate===true && !isEqualOld(classroomForm.get('chucNang').value, 'code')">
+                                                    {{ 'Message.Same' | translate }}
+                                                </span>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6" *ngIf="isUpdate===true">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"
+                                            for="statuss">{{'Classroom.Status'|translate}}
+                                            <span style="color:red;"> *</span>
+                                        </label>
+                                        <div class="col-md-8">
+                                            <input type="hidden" required>
+                                            <select class="form-control" formControlName="statuss" autofocus>
+                                                <option *ngFor="let status of listStatus" [value]="status.id">
+                                                    {{status.name}}</option>
+                                            </select>
+                                            <small class="error" *ngIf="classroomForm.get('statuss').invalid 
+                                  && (classroomForm.get('statuss').touched)">
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary"
+                                    [disabled]="!isValidForm()">{{ 'Common.Save' | translate }}</button>
+                                <button type="button" class="btn default" (click)="goBack()">
+                                    <i class="fa fa-undo"
+                                        aria-hidden="true"></i>{{ 'Common.Back' | translate }}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+</div>

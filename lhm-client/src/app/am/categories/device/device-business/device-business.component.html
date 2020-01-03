@@ -1,0 +1,194 @@
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <!-- (ngSubmit)="submit(AmphitheaterForm.value)" -->
+        <div class="portlet box grey-cascade">
+            <div class="portlet-title">
+                <div class="caption" *ngIf="isUpdate===true">
+                    <i class="fa fa-globe"></i>{{ 'SIDEBAR.Directory' | translate }} >
+                    {{ 'SIDEBAR.Device' | translate }} > {{ 'Common.Update'
+                    | translate }}
+                </div>
+                <div class="caption" *ngIf="isUpdate===false">
+                    <i class="fa fa-globe"></i>{{ 'SIDEBAR.Directory' | translate }} >
+                    {{ 'SIDEBAR.Device' | translate }} > {{ 'Common.Create'
+                    | translate }}
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-horizontal align-middle" [formGroup]="DeviceForm"
+                            (ngSubmit)="submit(DeviceForm.value)">
+                            <div class="row">
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"
+                                            for="nameDevice">{{ 'Device.Name' | translate }}
+                                            <span style="color:red;"> *</span>
+                                        </label>
+                                        <div class="col-md-8">
+                                            <input id="nameDevice" autocomplete="off" type="text" class="form-control"
+                                                formControlName="nameDevice"
+                                                placeholder="{{ 'Device.Name' | translate }}" />
+                                            <!-- <div class="col-md-8">{{amphitheater?.nameDevice}}</div> -->
+                                            <small class="error"
+                                                *ngIf="DeviceForm.get('nameDevice').invalid && (DeviceForm.get('nameDevice').touched)">
+                                                <span *ngIf="DeviceForm.get('nameDevice').errors.required">
+                                                    {{ 'Message.Required' | translate }}
+                                                </span>
+                                                <span
+                                                    *ngIf="isUpdate===false && !DeviceForm.get('nameDevice').errors.required&&DeviceForm.get('nameDevice').errors.pattern!=null">
+                                                    {{ 'Message.CodeInvalid' | translate }}
+                                                </span>
+                                                <span
+                                                    *ngIf="!DeviceForm.get('nameDevice').errors.required&&DeviceForm.get('nameDevice').errors.maxlength!=null">
+                                                    {{ 'Message.MaxLength' | translate }} 20
+                                                </span>
+                                            </small>
+                                            <small class="error"
+                                                *ngIf="!DeviceForm.get('nameDevice').invalid && (DeviceForm.get('nameDevice').touched)">
+                                                <span *ngIf="DeviceForm.get('nameDevice').value.trim() == ''">
+                                                    {{ 'Message.CodeInvalid' | translate }}
+                                                </span>
+                                                <span
+                                                    *ngIf="isUpdate===true && !isEqualOld(DeviceForm.get('nameDevice').value, 'code')">
+                                                    {{ 'Message.Same' | translate }}
+                                                </span>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <small class="error"
+                                    *ngIf="DeviceForm.get('nameDevice').invalid && (DeviceForm.get('nameDevice').touched)">
+                                    <span
+                                        *ngIf="DeviceForm.get('nameDevice').errors.required||DeviceForm.get('nameDevice').errors.pattern!=null">
+                                        {{ 'Message.Required' | translate }}
+                                    </span>
+                                    <span
+                                        *ngIf="!DeviceForm.get('nameDevice').errors.required&&DeviceForm.get('nameDevice').errors.maxlength!=null">
+                                        {{ 'Message.MaxLength' | translate }} 50
+                                    </span>
+                                </small>
+                                <small class="error"
+                                    *ngIf="!DeviceForm.get('nameDevice').invalid && (DeviceForm.get('nameDevice').touched)">
+                                    <span
+                                        *ngIf="isUpdate===true && !isEqualOld(DeviceForm.get('nameDevice').value, 'name')">
+                                        {{ 'Message.Same' | translate }}
+                                    </span>
+                                </small>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6" *ngIf="!isUpdate===true">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4" for="statuss">{{'Device.Status'|translate}}
+                                            <span style="color:red;"> *</span>
+                                        </label>
+                                        <div class="col-md-8">
+                                            <input type="hidden" required>
+                                            <select class="form-control" formControlName="statuss" autofocus>
+                                                <option *ngFor="let statuss of listStatus" [value]="statuss.id">
+                                                    {{statuss.name}}</option>
+                                            </select>
+                                            <small class="error" *ngIf="DeviceForm.get('statuss').invalid
+                                          && (DeviceForm.get('statuss').touched)">
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-md-6">
+                                  <input id="id" type="hidden" class="form-control" formControlName="idDevice" />
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"
+                                            for="classroom">{{ 'Device.Classroom' | translate }}
+                                            <span style="color:red;"> *</span>
+                                        </label>
+                                        <div class="col-md-8">
+                                            <ng-select [disabled]="false"
+                                                [active]="indexclassroomSelection!=null?[classroomSelections[indexclassroomSelection]]:''"
+                                                [disabled]="disabled" [items]="classroomSelections"
+                                                (selected)="classroomChanged($event?.id)"
+                                                (removed)="refreshclassroomValue($event)"
+                                                placeholder="{{ 'Device.Classroom' | translate }}  " ngDefaultControl>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"
+                                            for="amount">{{ 'Device.Amount' | translate }}
+                                            <span style="color:red;"> *</span>
+                                        </label>
+                                        <div class="col-md-8">
+                                            <input id="amount" autocomplete="off" type="text" class="form-control"
+                                                formControlName="amount"
+                                                placeholder="{{ 'Device.Amount' | translate }}" />
+                                            <!-- <div class="col-md-8">{{amphitheater?.nameDevice}}</div> -->
+                                            <small class="error"
+                                                *ngIf="DeviceForm.get('amount').invalid && (DeviceForm.get('amount').touched)">
+                                                <span *ngIf="DeviceForm.get('amount').errors.required">
+                                                    {{ 'Message.Required' | translate }}
+                                                </span>
+                                                <span
+                                                    *ngIf="isUpdate===false && !DeviceForm.get('amount').errors.required&&DeviceForm.get('amount').errors.pattern!=null">
+                                                    {{ 'Message.CodeInvalid' | translate }}
+                                                </span>
+                                                <span
+                                                    *ngIf="!DeviceForm.get('amount').errors.required&&DeviceForm.get('amount').errors.maxlength!=null">
+                                                    {{ 'Message.MaxLength' | translate }} 20
+                                                </span>
+                                            </small>
+                                            <small class="error"
+                                                *ngIf="!DeviceForm.get('amount').invalid && (DeviceForm.get('amount').touched)">
+                                                <span *ngIf="DeviceForm.get('amount').value.trim() == ''">
+                                                    {{ 'Message.CodeInvalid' | translate }}
+                                                </span>
+                                                <span
+                                                    *ngIf="isUpdate===true && !isEqualOld(DeviceForm.get('amount').value, 'code')">
+                                                    {{ 'Message.Same' | translate }}
+                                                </span>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" *ngIf="isUpdate===true">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4" for="statuss">{{'Device.Status'|translate}}
+                                            <span style="color:red;"> *</span>
+                                        </label>
+                                        <div class="col-md-8">
+                                            <input type="hidden" required>
+                                            <select class="form-control" formControlName="statuss" autofocus>
+                                                <option *ngFor="let statuss of listStatuss" [value]="statuss.id">
+                                                    {{statuss.name}}</option>
+                                            </select>
+                                            <small class="error" *ngIf="DeviceForm.get('statuss').invalid
+                                          && (DeviceForm.get('statuss').touched)">
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary"
+                                    [disabled]="!isValidForm()">{{ 'Common.Save' | translate }}</button>
+                                <button type="button" class="btn default" (click)="goBack()">
+                                    <i class="fa fa-undo"
+                                        aria-hidden="true"></i>{{ 'Common.Back' | translate }}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+</div>

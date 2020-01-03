@@ -1,0 +1,69 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet box grey-cascade">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-globe"></i>{{ 'SIDEBAR.Directory' | translate }} >
+                    {{ 'SIDEBAR.Device' | translate }} > {{ 'Common.Detail'
+                    | translate }}
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-horizontal align-middle">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label
+                                            class="col-md-4 text-right">{{'Device.Name'|translate}}</label>
+                                        <div class="col-md-8">{{device?.nameDevice}}</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label
+                                            class="col-md-4 text-right">{{'Device.Classroom'|translate}}</label>
+                                        <div class="col-md-8">{{device?.classroom.nameClassroom}}</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label
+                                            class="col-md-4 text-right">{{'Device.Amount'|translate}}</label>
+                                        <div class="col-md-8">{{device?.amount}}</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label
+                                            class="col-md-4 text-right">{{'Device.CreateTime'|translate}}</label>
+                                        <div class="col-md-8">{{device?.createTime |  date: 'dd/MM/yyyy'}}</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label
+                                            class="col-md-4 text-right">{{'Device.CreatedBy'|translate}}</label>
+                                        <div class="col-md-8">{{device?.createdBy}}</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label
+                                            class="col-md-4 text-right">{{'Device.UpdateTime'|translate}}</label>
+                                        <div class="col-md-8">{{device?.updateTime |  date: 'dd/MM/yyyy'}}</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label
+                                            class="col-md-4 text-right">{{'Device.UpdatedBy'|translate}}</label>
+                                        <div class="col-md-8">{{device?.updatedBy}}</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 text-right">{{'Device.Status'|translate}}</label>
+                                        <div class="col-md-8">{{device?.statuss==1?'Active':'Inactive'}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn default" (click)="goBack()">
+                                    <i class="fa fa-undo"
+                                        aria-hidden="true"></i>{{ 'Common.Back' | translate }}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
